@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Kalkulator Bahan Bekas & Produk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #34495e;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2980b9;
+        }
+
+        button {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* Warna tombol berbeda untuk setiap fungsi */
+        #pesanProdukBtn {
+            background-color: #e67e22; /* Orange */
+        }
+
+        #jualLimbahBtn {
+            background-color: #27ae60; /* Hijau */
+        }
+
+        #hitungProdukBtn {
+            background-color: #3498db; /* Biru */
+        }
+
+        #hitungLimbahBtn {
+            background-color: #e74c3c; /* Merah */
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kalkulator Produk & Bahan Bekas</h1>
+
+    <div class="container">
+        <!-- Tombol untuk memilih apakah ingin memesan produk atau menjual bahan bekas -->
+        <button id="pesanProdukBtn" onclick="showProdukForm()">Pesan Produk</button>
+        <button id="jualLimbahBtn" onclick="showLimbahForm()">Jual Bahan Bekas</button>
+
+        <!-- Form untuk pesan produk -->
+        <div id="produkContainer" style="display: none;">
+            <h2>Pesan Produk Celengan</h2>
+            <p>Harga Produk: Rp 25.000</p>
+            <label for="jumlahProduk">Jumlah Produk:</label>
+            <input type="number" id="jumlahProduk" placeholder="Masukkan jumlah produk"><br>
+            <button id="hitungProdukBtn" onclick="hitungTotalProduk()">Hitung Total Pesanan</button>
+            <p id="hasilProduk" class="result"></p>
+        </div>
+
+        <!-- Form untuk jual bahan bekas -->
+        <div id="limbahContainer" style="display: none;">
+            <h2>Jual Bahan Bekas</h2>
+            <label for="kategori">Pilih Kategori Bahan Bekas:</label>
+            <select id="kategori">
+                <option value="" disabled selected>Pilih kategori</option>
+                <option value="plastik">Plastik</option>
+                <option value="kain">Kain</option>
+                <option value="logam">Logam</option>
+                <option value="ranting">Ranting/Kayu</option>
+                <option value="karet">Karet</option>
+            </select><br>
+
+            <label for="jumlahLimbah">Jumlah Bahan Bekas (kg):</label>
+            <input type="number" id="jumlahLimbah" placeholder="Masukkan jumlah kg"><br>
+            <button id="hitungLimbahBtn" onclick="hitungTotalLimbah()">Hitung Total Bahan Bekas</button>
+            <p id="hasilLimbah" class="result"></p>
+        </div>
+    </div>
+
+    <script>
+        const hargaProduk = 25000; // Harga produk
+        const hargaPerKg = 6000; // Harga bahan bekas per kg
+
+        // Menampilkan form pesan produk
+        function showProdukForm() {
+            document.getElementById('produkContainer').style.display = 'block';
+            document.getElementById('limbahContainer').style.display = 'none';
+        }
+
+        // Menampilkan form jual bahan bekas
+        function showLimbahForm() {
+            document.getElementById('produkContainer').style.display = 'none';
+            document.getElementById('limbahContainer').style.display = 'block';
+        }
+
+        // Fungsi untuk menghitung total harga produk
+        function hitungTotalProduk() {
+            let jumlahProduk = document.getElementById('jumlahProduk').value;
+            if (jumlahProduk === "" || jumlahProduk <= 0) {
+                alert("Silakan masukkan jumlah produk yang benar!");
+                return;
+            }
+            let totalProduk = jumlahProduk * hargaProduk;
+            document.getElementById('hasilProduk').innerHTML = `Total yang harus dibayar: Rp ${totalProduk}`;
+
+            // Redirect ke WhatsApp
+            let pesan = `Halo, saya ingin memesan ${jumlahProduk} produk Celengan. Total yang harus dibayar: Rp ${totalProduk}.`;
+            let nomorWhatsApp = "6282289768007"; // Nomor WhatsApp
+            let url = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(pesan)}`;
+            window.location.href = url;
+        }
+
+        // Fungsi untuk menghitung total bahan bekas
+        function hitungTotalLimbah() {
+            let jumlahLimbah = document.getElementById('jumlahLimbah').value;
+            let kategori = document.getElementById('kategori').value;
+            if (jumlahLimbah === "" || jumlahLimbah <= 0 || kategori === "") {
+                alert("Silakan masukkan kategori dan jumlah bahan bekas yang benar!");
+                return;
+            }
+            let totalLimbah = jumlahLimbah * hargaPerKg;
+            document.getElementById('hasilLimbah').innerHTML = `Total nilai bahan bekas: Rp ${totalLimbah}`;
+
+            // Redirect ke WhatsApp
+            let pesan = `Halo, saya ingin menjual bahan bekas kategori ${kategori} sebanyak ${jumlahLimbah} kg. Total nilai bahan bekas: Rp ${totalLimbah}.`;
+            let nomorWhatsApp = "6282289768007"; // Nomor WhatsApp
+            let url = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(pesan)}`;
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
